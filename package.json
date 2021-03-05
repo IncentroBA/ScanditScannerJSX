@@ -1,0 +1,32 @@
+{
+  "name": "scannerscanditjsx",
+  "widgetName": "ScannerScanditJSX",
+  "version": "1.0.0",
+  "description": "My widget description",
+  "copyright": "2021 Incentro B.V.",
+  "author": "Roy van der Westen",
+  "config": {
+    "projectPath": "./tests/testProject/"
+  },
+  "packagePath": "incentro",
+  "scripts": {
+    "start": "npm run dev",
+    "build": "pluggable-widgets-tools build:native",
+    "dev": "pluggable-widgets-tools start:native",
+    "lint": "pluggable-widgets-tools lint",
+    "lint:fix": "pluggable-widgets-tools lint:fix",
+    "prerelease": "npm run lint",
+    "release": "pluggable-widgets-tools release:native"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Roy van der Westen/scannerscanditjsx/issues"
+  },
+  "devDependencies": {
+    "@mendix/pluggable-widgets-tools": "^8.14.0"
+  },
+  "dependencies": {
+    "scandit-react-native-datacapture-barcode": "^6.6.3",
+    "scandit-react-native-datacapture-core": "^6.6.3"
+  }
+}
