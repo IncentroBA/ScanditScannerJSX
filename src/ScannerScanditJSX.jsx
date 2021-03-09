@@ -1,5 +1,5 @@
 import React, { Component, createElement } from "react";
-import { Alert, AppState, BackHandler } from "react-native";
+import {Text,TouchableOpacity,View, Alert, AppState, StyleSheet, Vibration } from "react-native";
 import {
     BarcodeCapture,
     BarcodeCaptureOverlay,
@@ -14,18 +14,70 @@ import {
     DataCaptureView,
     FrameSourceState,
     RectangularViewfinder,
-    VideoResolution
-} from "scandit-react-native-datacapture-core";
+    VideoResolution,
+    TorchState
+} from "scandit-react-native-datacapture-core"; //,TorchState
 
-import { requestCameraPermissionsIfNeeded } from "./camera-permission-handler";
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'black'
+  },
+  bottom: {
+        justifyContent: 'flex-end',
+        backgroundColor: 'white',
+        alignItems: 'center',
+    },
+    switchOn: {
+       height: 45,
+       margin: 5,
+       borderRadius: 30,
+       backgroundColor: '#de712b',
+       alignItems: 'center',
+       justifyContent: 'center',
+       width: '85%',
+   },
+   switchOff: {
+       height: 45,
+       margin: 5,
+       borderRadius: 30,
+       backgroundColor: 'white',
+       borderWidth: 1,
+       borderColor: '#de712b',
+       alignItems: 'center',
+       justifyContent: 'center',
+       width: '85%',
+   },
+   textOn: {
+       color: 'white',
+       fontSize: 16,
+       margin: 50,
+       fontWeight: 'bold',
+   },
+   textOff: {
+       color: '#de712b',
+       fontSize: 16,
+       margin: 50,
+       fontWeight: 'bold',
+   }
+
+});
+
 
 export class ScannerScanditJSX extends Component {
-    constructor() {
-        super();
 
+
+
+    constructor(props) {
+
+        super(props);
+        licenseKey = this.props.licensekey;
+        this.onDetectHandler = this.onDetect.bind(this);
+        this.toggleTorchHandler = this.toggleTorch.bind(this)
         // Create data capture context using your license key.
-        this.dataCaptureContext = DataCaptureContext.forLicenseKey("Aawv+RI4MgB0EhR+jgn8qaAi8GllP2X6Ti7giLYSMMeLIjp73WsHAn5L90WnPLgn/zLiuWFrHdIqNHl1pmC/Zht7JRBLa2xEKyoUxCJlF+yOccR9jViUOm15WObcREYQM0yExu5i3ypqcidbjXjEYlBRFL95aPyTo1Drev5F/WnTSwAc52BUqmt2KQj1SpenZ3sQu0lZdnsUR6VdKWVFup5BU18heAUK5mKhYUJCwBIhZO26W0+P7+4XzvQvR2pwdUWLZTFtVOMYbBSjfEIO5o9YqJ7fS0BDsAxPqRtvTJOYVdJEp1Rq1h5u4AjyVdIpc0wRaiN5QfVJZnU0rkljsgJERCKkVJ+SOH/w269taL6pVpnUB1fp/X9DDuKUc39bWlswuYhmtO+Cdh9lzGHojkZskQYbIIIaBnpA8lBwAxZdR6j5rUCHlslB7fM+JZOSLHtqXrgtwx4MP1URsmGUc4lxdYSPS0LILw3bm9FEu6C0IKmDki9GmZNngyzlLFCKGBKokNMsU1G7J6pDVhbGgCowkEGR6AxjfuTZFkt+AKtmamywhJkx/ruNiKk53jTbZBHNKXUWlMv8BhvqHO8mkpntSj16/xGk1VBQJduMMXR+1HjvShPfDe6tLI2HcmGCgdDjFRTh+qmEp4RdBhZ9SL878PGes7wmDwC/EcXzpdpm6bHixAVSAzo4o8PJ7k5azhnl2Z34ZetbHtdOmOz23KXYVdzEaorXMPrDTuFkHDClR6xPcCK4EJDn+GCfhiAqZq6hZxCmDT4R1IUh9A9+etJFVRMnRW9hwbgKxZ7dVWCUyyPRxNpXC8smge5yNpJqZhyabBExcuxAgpk4ln5IRVYvzc/SHacMvWdO/KRTjAAalWq8cDtpe1KHHiGw/8tmGpqL5PBtn5gJWJDsecNJlV6Gc96aEYSAirOJTNgYksTdPdNN1C5aij4lsS51SQShdr2ke24jXEPnh6+aRj79hQR/w1DwhP0j8xD6Fwbf/FEjsQM3s1KQRxzMy4CYKeuAW0HQ7QpaLufYsyjIjRsPuFj0O/5+fpisxxp1GGcWU7iMlG4sVlZv1MK/fHs1rrXYbZxSEllLDHrJScV2jOXAjhSJCgVyoRQSwnHYDUqqQzVIIuFAyLfN9rvTKHgUVkXXDuqerJcQaKB8Nbhir26cKqk7gmyvgeJaeVoPZEbYvjiptUOBQV2MlMf0JpgHbcI=");
+        this.dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
         this.viewRef = React.createRef();
+        this.torchON = true;
     }
 
     componentDidMount() {
@@ -44,6 +96,18 @@ export class ScannerScanditJSX extends Component {
         } else {
             this.startCapture();
         }
+    }
+
+    onDetect(){
+      const { onDetectAction } = this.props;
+      if (onDetectAction && onDetectAction.canExecute && !onDetectAction.isExecuting) {
+          Vibration.vibrate(400);
+          onDetectAction.execute();
+          this.barcodeCaptureMode.isEnabled = true; // so for the next scan it is enabled already
+      }
+    }
+    toggleTorch(){
+        this.torchON = !this.torchON;
     }
 
     startCapture() {
@@ -71,15 +135,19 @@ export class ScannerScanditJSX extends Component {
 
             const cameraSettings = new CameraSettings();
             cameraSettings.preferredResolution = VideoResolution.FullHD;
+            //this.camera.desiredTorchState(TorchState.On);
             this.camera.applySettings(cameraSettings);
+            this.camera.switchToDesiredState(FrameSourceState.On);
         }
+
 
         // Switch camera on to start streaming frames and enable the barcode capture mode.
         // The camera is started asynchronously and will take some time to completely turn on.
-        requestCameraPermissionsIfNeeded()
-            .then(() => this.camera.switchToDesiredState(FrameSourceState.On))
-            .catch(() => BackHandler.exitApp());
-    }
+
+    //     requestCameraPermissionsIfNeeded()
+    //         .then(() =>)s
+    //         .catch(() => BackHandler.exitApp());
+     }
 
     setupScanning() {
         // The barcode capturing process is configured through barcode capture settings
@@ -89,15 +157,14 @@ export class ScannerScanditJSX extends Component {
         // The settings instance initially has all types of barcodes (symbologies) disabled. For the purpose of this
         // sample we enable a very generous set of symbologies. In your own app ensure that you only enable the
         // symbologies that your app requires as every additional enabled symbology has an impact on processing times.
+        //CUSTOMused symbologies by Van Meeuwen
+        const symbologiesToUse = [];
+
         settings.enableSymbologies([
             Symbology.EAN13UPCA,
             Symbology.EAN8,
-            Symbology.UPCE,
             Symbology.QR,
-            Symbology.DataMatrix,
-            Symbology.Code39,
-            Symbology.Code128,
-            Symbology.InterleavedTwoOfFive,
+            Symbology.Code128
         ]);
 
         // Some linear/1d barcode symbologies allow you to encode variable-length data. By default, the Scandit
@@ -123,12 +190,14 @@ export class ScannerScanditJSX extends Component {
                 // longer periods of time. See the documentation to learn more about this.
                 this.barcodeCaptureMode.isEnabled = false;
 
-                Alert.alert(
-                    null,
-                    `Scanned: ${barcode.data} (${symbology.readableName})`,
-                    [{ text: 'OK', onPress: () => this.barcodeCaptureMode.isEnabled = true }],
-                    { cancelable: false }
-                );
+                this.props.barcode.setValue(barcode.data); // set barcode value
+                this.onDetect()
+                // Alert.alert(
+                //     null,
+                //     `Scanned: ${barcode.data} (${symbology.readableName})`,
+                //     [{ text: 'OK', onPress: () => this.barcodeCaptureMode.isEnabled = true }],
+                //     { cancelable: false }
+                // );
             }
         };
 
@@ -143,7 +212,16 @@ export class ScannerScanditJSX extends Component {
 
     render() {
         return (
+           <View style={styles.container}>
             <DataCaptureView style={{ flex: 1 }} context={this.dataCaptureContext} ref={this.viewRef} />
+
+            <View style={styles.bottom}>
+                    <TouchableOpacity onPress={this.toggleTorchHandler} style={this.torchON ? styles.switchOff : styles.switchOn}>
+                        <Text style={this.torchON ? styles.textOff : styles.textOn}>↯ Lamp {this.torchON ? false : true}</Text>
+                    </TouchableOpacity>
+                </View>
+
+           </View>
         );
     };
 }

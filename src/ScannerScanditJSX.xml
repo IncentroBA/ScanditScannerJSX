@@ -8,9 +8,22 @@
     <icon/>
     <properties>
         <propertyGroup caption="General">
-            <property key="yourName" type="string" required="false">
-                <caption>Name</caption>
-                <description>Enter your name</description>
+            <property key="licensekey" type="string" required="true">
+                <caption>LicenseKey</caption>
+                <description>LicenseKey found in your scandit account</description>
+            </property>
+            <property key="barcode" type="attribute">
+                   <caption>Barcode</caption>
+                   <description>The attribute that will receive the scanned barcode value.</description>
+                   <attributeTypes>
+                       <attributeType name="String"/>
+                   </attributeTypes>
+               </property>
+        </propertyGroup>
+        <propertyGroup caption="Events">
+            <property key="onDetectAction" type="action" required="false">
+                <caption>On detect</caption>
+                <description>Action to trigger when the barcode/QR is detected</description>
             </property>
         </propertyGroup>
     </properties>
