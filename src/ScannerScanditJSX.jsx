@@ -1,5 +1,5 @@
 import React, { Component, createElement } from "react";
-import {Text,TouchableOpacity,View, Alert, AppState, StyleSheet, Vibration } from "react-native";
+import {Text,TextInput,TouchableOpacity,View, Alert, AppState, StyleSheet, Vibration } from "react-native";
 import {
     BarcodeCapture,
     BarcodeCaptureOverlay,
@@ -59,7 +59,23 @@ export const styles = StyleSheet.create({
        fontSize: 16,
        margin: 50,
        fontWeight: 'bold',
-   }
+   },
+   textBox: {
+        backgroundColor: 'white',
+        alignItems: 'center',
+    },
+    textInput: {
+        height: 45,
+        margin: 5,
+        width: 300,
+        borderBottomWidth: 1,
+        borderBottomColor: '#de712b',
+    },
+    textBarcode: {
+        color: '#de712b',
+        fontSize: 16,
+        fontWeight: 'bold',
+    }
 
 });
 
@@ -73,11 +89,16 @@ export class ScannerScanditJSX extends Component {
         super(props);
         licenseKey = this.props.licensekey;
         this.onDetectHandler = this.onDetect.bind(this);
-        this.toggleTorchHandler = this.toggleTorch.bind(this)
+        this.toggleTorchHandler = this.toggleTorch.bind(this);
+        this.manualBarcodeHandler = this.manualBarcode.bind(this);
         // Create data capture context using your license key.
         this.dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
         this.viewRef = React.createRef();
         this.torchON = true;
+        this.autoDetect = true;
+        this.state = {
+          textboxValue : ''
+        }
     }
 
     componentDidMount() {
@@ -106,9 +127,19 @@ export class ScannerScanditJSX extends Component {
           this.barcodeCaptureMode.isEnabled = true; // so for the next scan it is enabled already
       }
     }
+
+    manualBarcode() {
+       this.props.barcode.setValue(this.state.textboxValue);
+       this.onDetect();
+   }
+
     toggleTorch(){
         this.torchON = !this.torchON;
     }
+
+    toggleAutoDetect(){
+        this.setState({autoDetect: !this.state.autoDetect})
+     }
 
     startCapture() {
         this.startCamera();
@@ -159,13 +190,101 @@ export class ScannerScanditJSX extends Component {
         // symbologies that your app requires as every additional enabled symbology has an impact on processing times.
         //CUSTOMused symbologies by Van Meeuwen
         const symbologiesToUse = [];
+        if(this.props.QR){
+          symbologiesToUse.push(Symbology.QR);
+        }
+        if(this.props.EAN8){
+          symbologiesToUse.push(Symbology.EAN8);
+        }
+        if(this.props.EAN13UPCA){
+          symbologiesToUse.push(Symbology.EAN13UPCA);
+        }
+        if(this.props.Code128){
+          symbologiesToUse.push(Symbology.Code128);
+        }
+        if(this.props.Code39){
+          symbologiesToUse.push(Symbology.Code39);
+        }
+        if(this.props.Code93){
+          symbologiesToUse.push(Symbology.Code93);
+        }
+        if(this.props.Code11){
+          symbologiesToUse.push(Symbology.Code11);
+        }
+        if(this.props.Code25){
+          symbologiesToUse.push(Symbology.Code25);
+        }
+        if(this.props.UPCE){
+          symbologiesToUse.push(Symbology.UPCE);
+        }
+        if(this.props.Codabar){
+          symbologiesToUse.push(Symbology.Codabar);
+        }
+        if(this.props.InterleavedTwoOfFive){
+          symbologiesToUse.push(Symbology.InterleavedTwoOfFive);
+        }
+        if(this.props.MSIPlessey){
+          symbologiesToUse.push(Symbology.MSIPlessey);
+        }
+        if(this.props.DataMatrix){
+          symbologiesToUse.push(Symbology.DataMatrix);
+        }
+        if(this.props.Aztec){
+          symbologiesToUse.push(Symbology.Aztec);
+        }
+        if(this.props.MaxiCode){
+          symbologiesToUse.push(Symbology.MaxiCode);
+        }
+        if(this.props.DotCode){
+          symbologiesToUse.push(Symbology.DotCode);
+        }
+        if(this.props.KIX){
+          symbologiesToUse.push(Symbology.KIX);
+        }
+        if(this.props.RM4SCC){
+          symbologiesToUse.push(Symbology.RM4SCC);
+        }
+        if(this.props.GS1Databar){
+          symbologiesToUse.push(Symbology.GS1Databar);
+        }
+        if(this.props.GS1DatabarExpanded){
+          symbologiesToUse.push(Symbology.GS1DatabarExpanded);
+        }
+        if(this.props.GS1DatabarLimited){
+          symbologiesToUse.push(Symbology.GS1DatabarLimited);
+        }
+        if(this.props.PDF417){
+          symbologiesToUse.push(Symbology.PDF417);
+        }
+        if(this.props.MicroPDF417){
+          symbologiesToUse.push(Symbology.MicroPDF417);
+        }
+        if(this.props.MicroQR){
+          symbologiesToUse.push(Symbology.MicroQR);
+        }
+        if(this.props.Code32){
+          symbologiesToUse.push(Symbology.Code32);
+        }
+        if(this.props.Lapa4SC){
+          symbologiesToUse.push(Symbology.Lapa4SC);
+        }
+        if(this.props.IATATwoOfFive){
+          symbologiesToUse.push(Symbology.IATATwoOfFive);
+        }
+        if(this.props.MatrixTwoOfFive){
+          symbologiesToUse.push(Symbology.MatrixTwoOfFive);
+        }
+        if(this.props.USPSIntelligentMail){
+          symbologiesToUse.push(Symbology.USPSIntelligentMail);
+        }
 
-        settings.enableSymbologies([
-            Symbology.EAN13UPCA,
-            Symbology.EAN8,
-            Symbology.QR,
-            Symbology.Code128
-        ]);
+        // [
+        //     Symbology.EAN13UPCA,
+        //     Symbology.EAN8,
+        //     Symbology.QR,
+        //     Symbology.Code128
+        // ]
+        settings.enableSymbologies(symbologiesToUse);
 
         // Some linear/1d barcode symbologies allow you to encode variable-length data. By default, the Scandit
         // Data Capture SDK only scans barcodes in a certain length range. If your application requires scanning of one
@@ -216,10 +335,21 @@ export class ScannerScanditJSX extends Component {
             <DataCaptureView style={{ flex: 1 }} context={this.dataCaptureContext} ref={this.viewRef} />
 
             <View style={styles.bottom}>
+                   {!this.props.enableTorch ?  <View></View> :
                     <TouchableOpacity onPress={this.toggleTorchHandler} style={this.torchON ? styles.switchOff : styles.switchOn}>
-                        <Text style={this.torchON ? styles.textOff : styles.textOn}>↯ Lamp {this.torchON ? false : true}</Text>
+                        <Text style={this.torchON ? styles.textOff : styles.textOn}>↯ Lamp {this.torchON ? ' aan' : ' uit'}</Text>
                     </TouchableOpacity>
-                </View>
+                  }
+                  {!this.props.enableManualDetection ? <View></View> :
+                    <View style={styles.textBox}>
+                        <Text style={styles.textBarcode}>Barcode: </Text>
+                        <TextInput style={styles.textInput} placeholder="Scan of vul handmatig" value={this.state.textboxValue}  onChangeText={(text) => this.setState({textboxValue: text})} />
+                        <TouchableOpacity onPress={this.manualBarcodeHandler} style={styles.switchOn}>
+                            <Text style={styles.textOn}>Naar machine</Text>
+                        </TouchableOpacity>
+                    </View>
+                    }
+              </View>
 
            </View>
         );

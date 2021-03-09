@@ -19,9 +19,135 @@
                        <attributeType name="String"/>
                    </attributeTypes>
                </property>
+               <property key="enableTorch" type="boolean" required="true" defaultValue="true">
+                   <caption>Torch?</caption>
+                   <description></description>
+               </property>
+               <property key="enableManualDetection" type="boolean" required="true" defaultValue="true">
+                   <caption>Manual insertion?</caption>
+                   <description></description>
+               </property>
+        </propertyGroup>
+        <propertyGroup caption="Codes">
+          <property key="QR" type="boolean" required="true" defaultValue="true">
+              <caption>QR</caption>
+              <description></description>
+          </property>
+          <property key="EAN8" type="boolean" required="true" defaultValue="true">
+              <caption>EAN8</caption>
+              <description></description>
+          </property>
+          <property key="EAN13UPCA" type="boolean" required="true" defaultValue="true">
+              <caption>EAN13UPCA</caption>
+              <description></description>
+          </property>
+          <property key="Code128" type="boolean" required="true" defaultValue="true">
+              <caption>Code128</caption>
+              <description></description>
+          </property>
+          <property key="Code39" type="boolean" required="true" defaultValue="true">
+              <caption>Code39</caption>
+              <description></description>
+          </property>
+          <property key="Code93" type="boolean" required="true" defaultValue="true">
+              <caption>Code93</caption>
+              <description></description>
+          </property>
+          <property key="Code11" type="boolean" required="true" defaultValue="true">
+              <caption>Code11</caption>
+              <description></description>
+          </property>
+          <property key="Code25" type="boolean" required="true" defaultValue="true">
+              <caption>Code25</caption>
+              <description></description>
+          </property>
+          <property key="UPCE" type="boolean" required="true" defaultValue="true">
+              <caption>UPCE</caption>
+              <description></description>
+          </property>
+          <property key="Codabar" type="boolean" required="true" defaultValue="true">
+              <caption>Codabar</caption>
+              <description></description>
+          </property>
+          <property key="InterleavedTwoOfFive" type="boolean" required="true" defaultValue="true">
+              <caption>InterleavedTwoOfFive</caption>
+              <description></description>
+          </property>
+          <property key="MSIPlessey" type="boolean" required="true" defaultValue="true">
+              <caption>MSIPlessey</caption>
+              <description></description>
+          </property>
+          <property key="DataMatrix" type="boolean" required="true" defaultValue="true">
+              <caption>DataMatrix</caption>
+              <description></description>
+          </property>
+          <property key="Aztec" type="boolean" required="true" defaultValue="true">
+              <caption>Aztec</caption>
+              <description></description>
+          </property>
+          <property key="MaxiCode" type="boolean" required="true" defaultValue="true">
+              <caption>MaxiCode</caption>
+              <description></description>
+          </property>
+          <property key="DotCode" type="boolean" required="true" defaultValue="true">
+              <caption>DotCode</caption>
+              <description></description>
+          </property>
+          <property key="KIX" type="boolean" required="true" defaultValue="true">
+              <caption>KIX</caption>
+              <description></description>
+          </property>
+          <property key="RM4SCC" type="boolean" required="true" defaultValue="true">
+              <caption>RM4SCC</caption>
+              <description></description>
+          </property>
+          <property key="GS1Databar" type="boolean" required="true" defaultValue="true">
+              <caption>GS1Databar</caption>
+              <description></description>
+          </property>
+          <property key="GS1DatabarExpanded" type="boolean" required="true" defaultValue="true">
+              <caption>GS1DatabarExpanded</caption>
+              <description></description>
+          </property>
+          <property key="GS1DatabarLimited" type="boolean" required="true" defaultValue="true">
+              <caption>GS1DatabarLimited</caption>
+              <description></description>
+          </property>
+          <property key="PDF417" type="boolean" required="true" defaultValue="true">
+              <caption>PDF417</caption>
+              <description></description>
+          </property>
+          <property key="MicroPDF417" type="boolean" required="true" defaultValue="true">
+              <caption>MicroPDF417</caption>
+              <description></description>
+          </property>
+          <property key="MicroQR" type="boolean" required="true" defaultValue="true">
+              <caption>MicroQR</caption>
+              <description></description>
+          </property>
+          <property key="Code32" type="boolean" required="true" defaultValue="true">
+              <caption>Code32</caption>
+              <description></description>
+          </property>
+          <property key="Lapa4SC" type="boolean" required="true" defaultValue="true">
+              <caption>Lapa4SC</caption>
+              <description></description>
+          </property>
+          <property key="IATATwoOfFive" type="boolean" required="true" defaultValue="true">
+              <caption>IATATwoOfFive</caption>
+              <description></description>
+          </property>
+          <property key="MatrixTwoOfFive" type="boolean" required="true" defaultValue="true">
+              <caption>MatrixTwoOfFive</caption>
+              <description></description>
+          </property>
+          <property key="USPSIntelligentMail" type="boolean" required="true" defaultValue="true">
+              <caption>USPSIntelligentMail</caption>
+              <description></description>
+          </property>
         </propertyGroup>
         <propertyGroup caption="Events">
-            <property key="onDetectAction" type="action" required="false">
+            <property key="onDetectAction" type="action" required="false" >
                 <caption>On detect</caption>
                 <description>Action to trigger when the barcode/QR is detected</description>
             </property>
