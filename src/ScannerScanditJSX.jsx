@@ -88,7 +88,7 @@ export class ScannerScanditJSX extends Component {
     constructor(props) {
 
         super(props);
-        licenseKey = this.props.licensekey;
+        licenseKey = this.props.licensekey.value;
         this.onDetectHandler = this.onDetect.bind(this);
         this.toggleTorchHandler = this.toggleTorch.bind(this);
         this.manualBarcodeHandler = this.manualBarcode.bind(this);

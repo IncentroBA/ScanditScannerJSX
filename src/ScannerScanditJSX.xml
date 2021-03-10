@@ -8,9 +8,10 @@
     <icon/>
     <properties>
         <propertyGroup caption="General">
-            <property key="licensekey" type="string" required="true">
+            <property key="licensekey" type="expression" required="true" defaultValue="''">
                 <caption>LicenseKey</caption>
                 <description>LicenseKey found in your scandit account</description>
+                <returnType type="String" />
             </property>
             <property key="barcode" type="attribute">
                    <caption>Barcode</caption>
