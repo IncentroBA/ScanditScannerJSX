@@ -16,7 +16,8 @@ import {
     RectangularViewfinder,
     VideoResolution,
     TorchState
-} from "scandit-react-native-datacapture-core"; //,TorchState
+} from "scandit-react-native-datacapture-core";
+import { requestCameraPermissionsIfNeeded } from "./camera-permission-handler.js";
 
 export const styles = StyleSheet.create({
   container: {
@@ -174,10 +175,9 @@ export class ScannerScanditJSX extends Component {
 
         // Switch camera on to start streaming frames and enable the barcode capture mode.
         // The camera is started asynchronously and will take some time to completely turn on.
-
-    //     requestCameraPermissionsIfNeeded()
-    //         .then(() =>)s
-    //         .catch(() => BackHandler.exitApp());
+        requestCameraPermissionsIfNeeded()
+             .then(() => this.camera.switchToDesiredState(FrameSourceState.On))
+             .catch(() => this.camera.switchToDesiredState(FrameSourceState.Off));
      }
 
     setupScanning() {
@@ -308,7 +308,6 @@ export class ScannerScanditJSX extends Component {
                 // capture mode until the dialog is dismissed, as you should not block the BarcodeCaptureListener callbacks for
                 // longer periods of time. See the documentation to learn more about this.
                 this.barcodeCaptureMode.isEnabled = false;
-
                 this.props.barcode.setValue(barcode.data); // set barcode value
                 this.onDetect()
                 // Alert.alert(
