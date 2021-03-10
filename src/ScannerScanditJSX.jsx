@@ -95,10 +95,10 @@ export class ScannerScanditJSX extends Component {
         // Create data capture context using your license key.
         this.dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
         this.viewRef = React.createRef();
-        this.torchON = true;
         this.autoDetect = true;
         this.state = {
-          textboxValue : ''
+          textboxValue : '',
+          torchON : false
         }
     }
 
@@ -135,7 +135,15 @@ export class ScannerScanditJSX extends Component {
    }
 
     toggleTorch(){
-        this.torchON = !this.torchON;
+        //this.state.torchON = !this.state.torchON;
+        this.setState({torchON: !this.state.torchON})
+
+        this.camera.getIsTorchAvailable()
+        .then(() =>  {
+          if(this.state.torchON){this.camera.desiredTorchState  = TorchState.On;}
+          else {this.camera.desiredTorchState  = TorchState.Off;}
+         })
+        .catch(() => {this.camera.desiredTorchState  = TorchState.Off; });
     }
 
     toggleAutoDetect(){
@@ -167,7 +175,12 @@ export class ScannerScanditJSX extends Component {
 
             const cameraSettings = new CameraSettings();
             cameraSettings.preferredResolution = VideoResolution.FullHD;
-            //this.camera.desiredTorchState(TorchState.On);
+
+            // this.camera.getIsTorchAvailable()
+            // .then(() =>  {this.camera.desiredTorchState  = TorchState.Off; })
+            // .catch(() => {this.camera.desiredTorchState  = TorchState.Off; });
+
+
             this.camera.applySettings(cameraSettings);
             this.camera.switchToDesiredState(FrameSourceState.On);
         }
@@ -335,8 +348,8 @@ export class ScannerScanditJSX extends Component {
 
             <View style={styles.bottom}>
                    {!this.props.enableTorch ?  <View></View> :
-                    <TouchableOpacity onPress={this.toggleTorchHandler} style={this.torchON ? styles.switchOff : styles.switchOn}>
-                        <Text style={this.torchON ? styles.textOff : styles.textOn}>↯ Lamp {this.torchON ? ' aan' : ' uit'}</Text>
+                    <TouchableOpacity onPress={this.toggleTorchHandler} style={this.state.torchON ? styles.switchOn : styles.switchOff}>
+                        <Text style={this.state.torchON ? styles.textOn : styles.textOff}>↯ Lamp {this.state.torchON ? ' aan' : ' uit'}</Text>
                     </TouchableOpacity>
                   }
                   {!this.props.enableManualDetection ? <View></View> :
