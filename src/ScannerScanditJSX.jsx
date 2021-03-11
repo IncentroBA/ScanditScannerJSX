@@ -24,6 +24,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black'
   },
+  preview: {
+        flex: 1,
+        alignItems: 'center',
+        height: 550,
+    },
   bottom: {
         justifyContent: 'flex-end',
         backgroundColor: 'white',
@@ -103,29 +108,44 @@ export class ScannerScanditJSX extends Component {
     }
 
     componentDidMount() {
-        AppState.addEventListener('change', this.handleAppStateChange);
+      //Alert.alert('mount');
+        //AppState.addEventListener('change', this.handleAppStateChange);
+        this.startCapture();
         this.setupScanning();
     }
 
     componentWillUnmount() {
-        AppState.removeEventListener('change', this.handleAppStateChange);
+
+        //AppState.removeEventListener('change', this.handleAppStateChange);
+        this.stopCapture();
         this.dataCaptureContext.dispose();
     }
 
     handleAppStateChange = async (nextAppState) => {
+
+        //Alert.alert(JSON.stringify(nextAppState));
         if (nextAppState.match(/inactive|background/)) {
+            //Alert.alert('stop');
             this.stopCapture();
         } else {
+            //Alert.alert('start');
             this.startCapture();
         }
+
     }
+
+
 
     onDetect(){
       const { onDetectAction } = this.props;
       if (onDetectAction && onDetectAction.canExecute && !onDetectAction.isExecuting) {
           Vibration.vibrate(400);
+          // setTimeout(function () {
+          //     //this.startCapture();
+          //     //this.barcodeCaptureMode.isEnabled = true; //stop scanning barcodes
+          // },2000); // so for the next scan it is enabled already
           onDetectAction.execute();
-          this.barcodeCaptureMode.isEnabled = true; // so for the next scan it is enabled already
+
       }
     }
 
@@ -152,7 +172,9 @@ export class ScannerScanditJSX extends Component {
 
     startCapture() {
         this.startCamera();
-        this.barcodeCaptureMode.isEnabled = true;
+        if (this.barcodeCaptureMode){
+          this.barcodeCaptureMode.isEnabled = true;
+        }
     }
 
     stopCapture() {
@@ -176,11 +198,6 @@ export class ScannerScanditJSX extends Component {
             const cameraSettings = new CameraSettings();
             cameraSettings.preferredResolution = VideoResolution.FullHD;
 
-            // this.camera.getIsTorchAvailable()
-            // .then(() =>  {this.camera.desiredTorchState  = TorchState.Off; })
-            // .catch(() => {this.camera.desiredTorchState  = TorchState.Off; });
-
-
             this.camera.applySettings(cameraSettings);
             this.camera.switchToDesiredState(FrameSourceState.On);
         }
@@ -194,6 +211,7 @@ export class ScannerScanditJSX extends Component {
      }
 
     setupScanning() {
+
         // The barcode capturing process is configured through barcode capture settings
         // and are then applied to the barcode capture instance that manages barcode recognition.
         const settings = new BarcodeCaptureSettings();
@@ -320,9 +338,9 @@ export class ScannerScanditJSX extends Component {
                 // until the alert dialog is dismissed, we're showing the alert through a timeout and disabling the barcode
                 // capture mode until the dialog is dismissed, as you should not block the BarcodeCaptureListener callbacks for
                 // longer periods of time. See the documentation to learn more about this.
-                this.barcodeCaptureMode.isEnabled = false;
+                this.barcodeCaptureMode.isEnabled = false; //stop scanning barcodes
                 this.props.barcode.setValue(barcode.data); // set barcode value
-                this.onDetect()
+                this.onDetect();
                 // Alert.alert(
                 //     null,
                 //     `Scanned: ${barcode.data} (${symbology.readableName})`,
@@ -339,17 +357,18 @@ export class ScannerScanditJSX extends Component {
         this.overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(this.barcodeCaptureMode, this.viewRef.current);
         this.overlay.viewfinder = new RectangularViewfinder();
         this.overlay = this.overlay;
+
     }
 
     render() {
         return (
            <View style={styles.container}>
-            <DataCaptureView style={{ flex: 1 }} context={this.dataCaptureContext} ref={this.viewRef} />
+            <DataCaptureView style={styles.preview} context={this.dataCaptureContext} ref={this.viewRef} />
 
             <View style={styles.bottom}>
                    {!this.props.enableTorch ?  <View></View> :
-                    <TouchableOpacity onPress={this.toggleTorchHandler} style={this.state.torchON ? styles.switchOn : styles.switchOff}>
-                        <Text style={this.state.torchON ? styles.textOn : styles.textOff}>↯ Lamp {this.state.torchON ? ' aan' : ' uit'}</Text>
+                    <TouchableOpacity onPress={this.toggleTorchHandler} style={this.state.torchON ? styles.switchOff : styles.switchOn}>
+                        <Text style={this.state.torchON ? styles.textOff : styles.textOn}>↯ Lamp {this.state.torchON ? ' uit' : ' aan'}</Text>
                     </TouchableOpacity>
                   }
                   {!this.props.enableManualDetection ? <View></View> :
