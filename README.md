@@ -1,17 +1,10 @@
+# Not tested on iOS! Android only!
+
 ## ScannerScanditJSX
-[My widget description]
+This is the widget for the Scandit Scanner. To use you have to install the devdependencies in your native app also!
 
-## Features
-[feature highlights]
-
-## Usage
-[step by step instructions]
-
-## Demo project
-[link to sandbox]
-
-## Issues, suggestions and feature requests
-[link to GitHub issues]
-
-## Development and contribution
-[specify contribute]
+Add to your MainApplication.java:
+```
+import com.scandit.datacapture.reactnative.core.ScanditDataCaptureCorePackage; //scandit custom dependencies
+import com.scandit.datacapture.reactnative.barcode.ScanditDataCaptureBarcodePackage;//scandit custom dependencies
+```
