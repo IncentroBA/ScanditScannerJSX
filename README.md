@@ -1,7 +1,7 @@
 # Not tested on iOS! Android only!
 
 ## ScannerScanditJSX
-This is the widget for the Scandit Scanner. To use you have to install the devdependencies in your native app also!
+This is the widget for the Scandit Scanner. To use this you'll have to install the dev dependencies in your native app too!
 
 Add to your MainApplication.java:
 ```
